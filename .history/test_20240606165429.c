@@ -1,0 +1,15 @@
+#include <stdio.h>
+#include <assert.h>
+#include <stdlib.h>
+#include "inode.h"
+#include "diskimg.h"
+
+
+int main(void) {
+    int* pointer;
+    int* x = (int*) malloc(3*sizeof(int));
+    x[0] = 3;
+    *pointer = x[0];
+    free(x);
+    return 0;
+}
