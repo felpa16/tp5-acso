@@ -39,11 +39,10 @@ int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
     int bno = offset/DISKIMG_SECTOR_SIZE;
 
     int bytesMoved = file_getblock(fs, inumber, bno, buf);
-    printf("1\n");
     if (bytesMoved < 0)
+      printf("Error\n");
       return -1;
 
-    printf("2\n");
     if (!SHA1_Update(&shactx, buf, bytesMoved))
       return -1;
   }
