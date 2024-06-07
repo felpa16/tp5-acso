@@ -9,14 +9,14 @@
  * TODO
  */
 int inode_iget(struct unixfilesystem *fs, int inumber, struct inode *inp) {
-    if (fs == NULL || inp == NULL) return -1;
-    if (inumber < 1) return -1;
+    // if (fs == NULL || inp == NULL) return -1;
+    // if (inumber < 1) return -1;
     int inode_size = sizeof(struct inode);
     int sector_num = INODE_START_SECTOR + (((inumber - 1) * inode_size) / DISKIMG_SECTOR_SIZE);
     struct inode* inodes = (struct inode*) malloc(DISKIMG_SECTOR_SIZE);
     if (diskimg_readsector(fs->dfd, sector_num, inodes) == -1) {
         free(inodes);
-        return -1;
+        // return -1;
     }
     int index = (inumber - 1) % (DISKIMG_SECTOR_SIZE / inode_size);
     *inp = inodes[index];
