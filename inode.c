@@ -22,7 +22,7 @@ int inode_iget(struct unixfilesystem *fs, int inumber, struct inode *inp) {
     }
     int index = (inumber - 1) % (DISKIMG_SECTOR_SIZE / inode_size);
     *inp = inodes[index];
-    free(inodes);
+    free(inodes); 
     return 0;
 }
 
