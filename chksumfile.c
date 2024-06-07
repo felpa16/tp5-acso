@@ -38,16 +38,13 @@ int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
     char buf[DISKIMG_SECTOR_SIZE];
     int bno = offset/DISKIMG_SECTOR_SIZE;
 
-    printf("inumber: %i, block number: %i", inumber, bno);
     int bytesMoved = file_getblock(fs, inumber, bno, buf);
     if (bytesMoved < 0) {
-      printf("Error\n");
       return -1;
     }
     if (!SHA1_Update(&shactx, buf, bytesMoved))
       return -1;
   }
-  // printf("Entra\n");
   if (!SHA1_Final(chksum, &shactx))
     return -1;
 
