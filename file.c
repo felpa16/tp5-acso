@@ -10,7 +10,7 @@
  */
 int file_getblock(struct unixfilesystem *fs, int inumber, int blockNum, void *buf) {
     if (fs == NULL || buf == NULL) return -1;
-    if (inumber < 1 || inumber > fs->superblock.s_ninode) return -1;
+    if (inumber < 1) return -1;
     struct inode* inode = (struct inode*) malloc(sizeof(struct inode));
     if (inode_iget(fs, inumber, inode) == -1) {
         free(inode);
