@@ -42,12 +42,9 @@ int inode_indexlookup(struct unixfilesystem *fs, struct inode *inp, int blockNum
         block_count = size / DISKIMG_SECTOR_SIZE;
     }
     if (blockNum < 0 || blockNum > block_count) return -1;
+    
+    if (size <= DISKIMG_SECTOR_SIZE * 8) return inp->i_addr[blockNum];
 
-    int is_small = inp->i_mode ^ ILARG;
-    if (is_small) {
-        if (blockNum < 8) return inp->i_addr[blockNum];
-        return -1;
-    }
     int nums_per_block = DISKIMG_SECTOR_SIZE/sizeof(uint16_t);
     int first_idx = blockNum/nums_per_block;
     if (first_idx > 6) {
