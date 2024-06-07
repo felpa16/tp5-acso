@@ -38,7 +38,6 @@ int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
     char buf[DISKIMG_SECTOR_SIZE];
     int bno = offset/DISKIMG_SECTOR_SIZE;
 
-    printf("block number: %i\n", bno);
     int bytesMoved = file_getblock(fs, inumber, bno, buf);
     if (bytesMoved < 0) {
       return -1;
