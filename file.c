@@ -28,6 +28,7 @@ int file_getblock(struct unixfilesystem *fs, int inumber, int blockNum, void *bu
     if (blockNum < 0 || blockNum > block_count) return -1;
 
     int sector_num = inode_indexlookup(fs, inode, blockNum);
+    free(inode);
     if (diskimg_readsector(fs->dfd, sector_num, buf) == -1) return -1;
 
     if (blockNum < block_count) return DISKIMG_SECTOR_SIZE;
