@@ -13,6 +13,8 @@
 #include "chksumfile.h"
 #include <openssl/sha.h>
 
+
+
 int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
   SHA_CTX shactx;
   if (!SHA1_Init(&shactx)) {
@@ -43,7 +45,7 @@ int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
     if (!SHA1_Update(&shactx, buf, bytesMoved))
       return -1;
   }
-
+  printf("Entra\n");
   if (!SHA1_Final(chksum, &shactx))
     return -1;
 
