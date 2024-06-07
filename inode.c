@@ -22,7 +22,7 @@ int inode_iget(struct unixfilesystem *fs, int inumber, struct inode *inp) {
     }
     int index = (inumber - 1) % (DISKIMG_SECTOR_SIZE / inode_size);
     *inp = inodes[index];
-    free(inodes); 
+    free(inodes);
     return 0;
 }
 
@@ -43,7 +43,7 @@ int inode_indexlookup(struct unixfilesystem *fs, struct inode *inp, int blockNum
     }
     if (blockNum < 0 || blockNum > block_count) return -1;
 
-    int is_small = inp->i_mode & ILARG;
+    int is_small = inp->i_mode ^ ILARG;
     if (is_small) return inp->i_addr[blockNum];
     
     int nums_per_block = DISKIMG_SECTOR_SIZE/sizeof(uint16_t);
