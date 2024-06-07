@@ -10,7 +10,7 @@
  */
 int inode_iget(struct unixfilesystem *fs, int inumber, struct inode *inp) {
     if (fs == NULL || inp == NULL) return -1;
-    if (inumber < 1 || inumber > fs->superblock.s_ninode) return -1;
+    if (inumber < 1) return -1;
     int inode_size = sizeof(struct inode);
     int sector_num = INODE_START_SECTOR + (((inumber - 1) * inode_size) / DISKIMG_SECTOR_SIZE);
     struct inode* inodes = (struct inode*) malloc(DISKIMG_SECTOR_SIZE);
