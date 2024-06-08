@@ -67,7 +67,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
     free(dirents);
     free(inode);
     dirEnt = NULL; // ojo igual con esto porque podria llegar a dar seg faults? pero creo que queremos que de seg fault en este caso
-    return -1;
+    return -2;
     }
   }
 
@@ -125,7 +125,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
     free(dirents);
     free(inode);
     dirEnt = NULL;
-    return -1;
+    return -2;
   }
   if (diskimg_readsector(fs->dfd, inode->i_addr[7], sector_nums) == -1) {
     free(sector_nums);
@@ -175,5 +175,5 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
   free(dirents);
   free(inode);
   dirEnt = NULL;
-  return -1;
+  return -2;
 }
