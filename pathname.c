@@ -92,6 +92,7 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
                 free(split_strings[i]);
             }
             free(split_strings);
+            printf("Falla directory_findname\n");
             return -1;
         }
         dirinumber = dirent.d_inumber;
