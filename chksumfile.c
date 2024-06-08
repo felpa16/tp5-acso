@@ -25,11 +25,13 @@ int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
   struct inode in;
   int err = inode_iget(fs, inumber, &in);
   if (err < 0) {
+    printf("Error en el inode_iget\n");
     return err;
   }
 
   if (!(in.i_mode & IALLOC)) {
     // The inode isn't allocated, so we can't hash it.
+    printf("Error: el inode no se alocó\n");
     return -1;
   }
 
@@ -40,6 +42,7 @@ int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
 
     int bytesMoved = file_getblock(fs, inumber, bno, buf);
     if (bytesMoved < 0) {
+      printf("Error en el file_getblock\n");
       return -1;
     }
     if (!SHA1_Update(&shactx, buf, bytesMoved))
