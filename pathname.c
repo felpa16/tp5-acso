@@ -82,7 +82,7 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
         return -1;
     }
 
-    int dirinumber = 1;
+    int dirinumber = ROOT_INUMBER;
     for (int i = 0; i < count; i++) {
         struct direntv6 dirent;
         if (directory_findname(fs, split_strings[i], dirinumber, &dirent) == -1) { // esta fallando aca
@@ -93,15 +93,16 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
             printf("Falla directory_findname\n");
             return -1;
         }
-        if (directory_findname(fs, split_strings[i], dirinumber, &dirent) == -2) {
+        dirinumber = dirent.d_inumber;
+        struct inode buf;
+        if (inode_iget(fs, dirinumber, &buf) == -1) {
             for (int j = 0; j < count; j++) {
                 free(split_strings[i]);
             }
             free(split_strings);
-            printf("No se encontró el directorio especificado\n");
+            printf("Falla el inode_iget con dirinumber\n");
             return -1;
         }
-        dirinumber = dirent.d_inumber;
     }
     for (int i = 0; i < count; i++) {
         free(split_strings[i]);
