@@ -119,6 +119,6 @@ int inode_indexlookup(struct unixfilesystem *fs, struct inode *inp, int blockNum
 //     return result;
 // }
 
-// int inode_getsize(struct inode *inp) {
-//   return ((inp->i_size0 << 16) | inp->i_size1); 
-// }
+int inode_getsize(struct inode *inp) {
+  return ((inp->i_size0 << 16) | inp->i_size1); 
+}
