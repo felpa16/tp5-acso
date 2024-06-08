@@ -54,21 +54,21 @@ char **split(const char *str, const char *delimiter, int *count) {
 }
 
 int main() {
-    const char *str = "/foo/";
+    char *str = "/foo/";
     char* a = strtok(str, "/");
     printf("result: %c\n", a[0]);
-    const char *delimiter = "/";
-    int count;
-    char **result = split(str, delimiter, &count);
-    if (count == 0) count = 1;
+    // const char *delimiter = "/";
+    // int count;
+    // char **result = split(str, delimiter, &count);
+    // if (count == 0) count = 1;
 
-    // Print the result
-    printf("count: %i\n", count);
-    for (int i = 0; i < count; i++) {
-        printf("Token %d: %s\n", i, result[i]);
-        free(result[i]); // Free each token
-    }
-    free(result); // Free the array
+    // // Print the result
+    // printf("count: %i\n", count);
+    // for (int i = 0; i < count; i++) {
+    //     printf("Token %d: %s\n", i, result[i]);
+    //     free(result[i]); // Free each token
+    // }
+    // free(result); // Free the array
 
     return 0;
 }
