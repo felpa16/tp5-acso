@@ -136,12 +136,14 @@ static void DumpPathAndChildren(struct unixfilesystem *fs, const char *pathname,
 
   char chksum1[CHKSUMFILE_SIZE];
   if (chksumfile_byinumber(fs, inumber, chksum1) < 0) {
+    printf("Falla el byinumber\n");
     fprintf(stderr,"Can't checksum inode %d path %s\n", inumber, pathname);
     return;
   }
 
   char chksum2[CHKSUMFILE_SIZE];
   if (chksumfile_bypathname(fs, pathname, chksum2) < 0) {
+    printf("Falla el bypathname\n");
     fprintf(stderr,"Can't checksum inode %d path %s\n", inumber, pathname);
     return;
   }
