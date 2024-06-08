@@ -85,7 +85,7 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
     int dirinumber = 0;
     for (int i = 0; i < count; i++) {
         struct direntv6 dirent;
-        printf("initial inumber: %i", dirent.d_inumber);
+        printf("initial inumber: %i\n", dirent.d_inumber);
         if (directory_findname(fs, split_strings[i], dirinumber, &dirent) == -1) {
             for (int j = 0; j < count; j++) {
                 free(split_strings[i]);
