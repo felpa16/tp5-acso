@@ -57,11 +57,11 @@ int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
 }
 
 int chksumfile_bypathname(struct unixfilesystem *fs, const char *pathname, void *chksum) {
+  printf("inumber del chksumfile_bypathname: %i\n", inumber);
   int inumber = pathname_lookup(fs, pathname);
   if (inumber < 0) {
     return inumber;
   }
-  printf("inumber del chksumfile_bypathname: %i\n", inumber);
   return chksumfile_byinumber(fs, inumber, chksum);
 }
 
