@@ -6,6 +6,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 /**
  * TODO
@@ -49,7 +50,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
         free(inode);
         return -1;
       }
-      for (int j = 0; j < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); j++) {
+      for (long unsigned int j = 0; j < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); j++) {
         if (strcmp(dirents[j].d_name, name) == 0) {
           *dirEnt = dirents[j];
           free(dirents);
@@ -95,13 +96,13 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
       free(inode);
       return -1;
     }
-    for (int j = 0; j < DISKIMG_SECTOR_SIZE/sizeof(uint16_t); j++) { // no siempre va a medir 256, se puede optimizar para que solo itere hasta la cantidad de numeros que haya
+    for (long unsigned int j = 0; j < DISKIMG_SECTOR_SIZE/sizeof(uint16_t); j++) { // no siempre va a medir 256, se puede optimizar para que solo itere hasta la cantidad de numeros que haya
       if (diskimg_readsector(fs->dfd, sector_nums[j], dirents) == -1) {
         free(sector_nums);
         free(dirents);
         free(inode);
       }
-      for (int k = 0; k < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); k++) {
+      for (long unsigend int k = 0; k < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); k++) {
         if (strcmp(dirents[k].d_name, name) == 0) {
           *dirEnt = dirents[k];
           free(sector_nums);
@@ -133,7 +134,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
     free(inode);
     return -1;
   }
-  for (int i = 0; i < DISKIMG_SECTOR_SIZE/sizeof(uint16_t); i++) {
+  for (long unsigned int i = 0; i < DISKIMG_SECTOR_SIZE/sizeof(uint16_t); i++) {
     if (diskimg_readsector(fs->dfd, sector_nums[i], sector_nums_2) == -1) {
       free(sector_nums_2);
       free(sector_nums);
@@ -141,7 +142,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
       free(inode);
       return -1;
     }
-    for (int j = 0; j < DISKIMG_SECTOR_SIZE/sizeof(uint16_t); j++) {
+    for (long unsigned int j = 0; j < DISKIMG_SECTOR_SIZE/sizeof(uint16_t); j++) {
       if (diskimg_readsector(fs->dfd, sector_nums_2[j], dirents) == -1) {
         free(sector_nums_2);
         free(sector_nums);
@@ -149,7 +150,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
         free(inode);
         return -1;
       }
-      for (int k = 0; k < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); k++) {
+      for (long unsigned int k = 0; k < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); k++) {
         if (strcmp(dirents[k].d_name, name) == 0) {
           *dirEnt = dirents[k];
           free(sector_nums_2);
