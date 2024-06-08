@@ -22,7 +22,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
     return -1;
   }
   inode_iget(fs, dirinumber, inode);
-  if (inode->i_mode ^ IFDIR != 0) { // OJO CON ESTA LINEA
+  if ((inode->i_mode ^ IFDIR) != 0) { // OJO CON ESTA LINEA
     free(inode);
     return -1;
   }
