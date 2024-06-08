@@ -23,10 +23,10 @@ int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
   }
 
   struct inode in;
-  printf("Se llama a inode_iget con inumber %i\n", inumber);
+  // printf("Se llama a inode_iget con inumber %i\n", inumber);
   int err = inode_iget(fs, inumber, &in);
   if (err < 0) {
-    printf("Error en el inode_iget\n");
+    // printf("Error en el inode_iget\n");
     return err;
   }
 
@@ -61,7 +61,7 @@ int chksumfile_bypathname(struct unixfilesystem *fs, const char *pathname, void 
   if (inumber < 0) {
     return inumber;
   }
-  printf("inumber: %i", inumber);
+  // printf("inumber: %i\n", inumber);
   return chksumfile_byinumber(fs, inumber, chksum);
 }
 
