@@ -65,7 +65,7 @@ char **split(const char *str, const char *delimiter, int *count) {
  */
 int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
     printf("Se llama a pathname_lookup con path %s\n", pathname);
-    if (fs == NULL || pathname == NULL) return -1;
+    if (fs == NULL || pathname == NULL || strlen(pathname) == 0 || pathname[0] != '/') return -1;
     const char* home = "/";
     if (strcmp(pathname, home) == 0){
         return 1;
@@ -85,7 +85,7 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
     int dirinumber = 1;
     for (int i = 0; i < count; i++) {
         struct direntv6 dirent;
-        if (directory_findname(fs, split_strings[i], dirinumber, &dirent) == -1) {
+        if (directory_findname(fs, split_strings[i], dirinumber, &dirent) == -1) { // esta fallando aca
             for (int j = 0; j < count; j++) {
                 free(split_strings[i]);
             }
