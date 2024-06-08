@@ -81,6 +81,12 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
 
   uint16_t* sector_nums = (uint16_t*) malloc(DISKIMG_SECTOR_SIZE); // chequear si falla el malloc
   struct direntv6* dirents = (struct direntv6*) malloc(DISKIMG_SECTOR_SIZE);
+  if (sector_nums == NULL || dirents == NULL) {
+    free(sector_nums);
+    free(dirents);
+    free(inode);
+    return -1;
+  }
   for (int i = 0; i < block_count; i++) {
 
     if (diskimg_readsector(fs->dfd, inode->i_addr[i], sector_nums) == -1) {
@@ -120,6 +126,13 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
     return -1;
   }
   uint16_t* sector_nums_2 = (uint16_t*) malloc(DISKIMG_SECTOR_SIZE); // chequear el malloc
+  if (sector_nums_2 == NULL) {
+    free(sector_nums_2);
+    free(sector_nums);
+    free(dirents);
+    free(inode);
+    return -1;
+  }
   for (int i = 0; i < DISKIMG_SECTOR_SIZE/sizeof(uint16_t); i++) {
     if (diskimg_readsector(fs->dfd, sector_nums[i], sector_nums_2) == -1) {
       free(sector_nums_2);
