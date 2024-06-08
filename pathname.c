@@ -65,6 +65,7 @@ char **split(const char *str, const char *delimiter, int *count) {
  * TODO
  */
 int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
+    printf("Se llama a pathname_lookup con path %s", pathname);
     if (fs == NULL || pathname == NULL) return -1;
     const char* home = "/";
     if (strcmp(pathname, home) == 0){
