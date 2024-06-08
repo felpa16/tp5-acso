@@ -29,11 +29,11 @@ int file_getblock(struct unixfilesystem *fs, int inumber, int blockNum, void *bu
 
     int sector_num = inode_indexlookup(fs, inode, blockNum);
     free(inode);
-    if (diskimg_readsector(fs->dfd, sector_num, buf) == -1) return -1;
-
+    if (diskimg_readsector(fs->dfd, sector_num, buf) == -1) {
+        free(inode);
+        return -1;
+    }
     if (blockNum < block_count) return DISKIMG_SECTOR_SIZE;
-    return size - ((block_count - 1) * DISKIMG_SECTOR_SIZE);
-
-    return 0;
+    // return size - ((block_count - 1) * DISKIMG_SECTOR_SIZE);
+    return size % DISKIMG_SECTOR_SIZE;
 }
-
