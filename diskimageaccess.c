@@ -181,6 +181,7 @@ static void DumpPathAndChildren(struct unixfilesystem *fs, const char *pathname,
 
         char nextpath[MAXPATH];
         sprintf(nextpath, "%s/%s",pathname, direntries[i].d_name);
+        printf("direntry inumber: %i\n", direntries[i].d_inumber);
         DumpPathAndChildren(fs, nextpath,  direntries[i].d_inumber, f);
       }
   }
