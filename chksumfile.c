@@ -61,7 +61,7 @@ int chksumfile_bypathname(struct unixfilesystem *fs, const char *pathname, void 
   if (inumber < 0) {
     return inumber;
   }
-  print("inumber: %i", inumber);
+  printf("inumber: %i", inumber);
   return chksumfile_byinumber(fs, inumber, chksum);
 }
 
