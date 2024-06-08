@@ -136,14 +136,12 @@ static void DumpPathAndChildren(struct unixfilesystem *fs, const char *pathname,
 
   char chksum1[CHKSUMFILE_SIZE];
   if (chksumfile_byinumber(fs, inumber, chksum1) < 0) {
-    printf("Falla el byinumber\n");
     fprintf(stderr,"Can't checksum inode %d path %s\n", inumber, pathname);
     return;
   }
 
   char chksum2[CHKSUMFILE_SIZE];
-  if (chksumfile_bypathname(fs, pathname, chksum2) < 0) {
-    printf("Falla el bypathname\n");
+  if (chksumfile_bypathname(fs, pathname, chksum2) < 0) { // esta fallando aca
     fprintf(stderr,"Can't checksum inode %d path %s\n", inumber, pathname);
     return;
   }
@@ -171,6 +169,7 @@ static void DumpPathAndChildren(struct unixfilesystem *fs, const char *pathname,
 
       struct direntv6 direntries[10000];
       int numentries = GetDirEntries(fs, inumber, direntries, 10000);
+      printf("numentries: %i", numentries);
       for (int i = 0; i < numentries; i++) {
         char *n =  direntries[i].d_name;
         if (n[0] == '.') {
