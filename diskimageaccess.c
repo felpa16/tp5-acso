@@ -179,6 +179,7 @@ static void DumpPathAndChildren(struct unixfilesystem *fs, const char *pathname,
 
         char nextpath[MAXPATH];
         sprintf(nextpath, "%s/%s",pathname, direntries[i].d_name);
+        printf("Llega hasta acá");
         DumpPathAndChildren(fs, nextpath,  direntries[i].d_inumber, f);
       }
   }
