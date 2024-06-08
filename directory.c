@@ -102,7 +102,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
         free(dirents);
         free(inode);
       }
-      for (long unsigend int k = 0; k < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); k++) {
+      for (long unsigned int k = 0; k < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); k++) {
         if (strcmp(dirents[k].d_name, name) == 0) {
           *dirEnt = dirents[k];
           free(sector_nums);
