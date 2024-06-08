@@ -31,6 +31,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
     return -1;
   }
   int size = inode_getsize(inode);
+  printf("Tamaño del directorio: %i bytes\n", size);
   int mod = size % DISKIMG_SECTOR_SIZE;
   int block_count;
   if (size <= 8 * DISKIMG_SECTOR_SIZE) { // small directory
@@ -56,6 +57,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
       }
       for (long unsigned int j = 0; j < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); j++) {
         if (strcmp(dirents[j].d_name, name) == 0) {
+          printf("1\n");
           *dirEnt = dirents[j];
           free(dirents);
           free(inode);
@@ -108,6 +110,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
       }
       for (long unsigned int k = 0; k < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); k++) {
         if (strcmp(dirents[k].d_name, name) == 0) {
+          printf("2\n");
           *dirEnt = dirents[k];
           free(sector_nums);
           free(dirents);
@@ -156,6 +159,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
       }
       for (long unsigned int k = 0; k < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); k++) {
         if (strcmp(dirents[k].d_name, name) == 0) {
+          printf("3\n");
           *dirEnt = dirents[k];
           free(sector_nums_2);
           free(sector_nums);
