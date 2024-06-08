@@ -66,9 +66,21 @@ char **split(const char *str, const char *delimiter, int *count) {
  */
 int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
     if (fs == NULL || pathname == NULL) return -1;
+    char* home = "/";
+    if (strcmp(pathname, home) == 0){
+        return 1;
+    }
     int count;
     const char* delimiter = "/";
     char** split_strings = split(pathname, delimiter, &count);
+    if (count == 0) {
+        for (int i = 0; i < count; i++) {
+            free(split_strings[i]);
+        }
+        free(split_strings);
+        printf("There are no directories in the specified path (count = 0)\n");
+        return -1;
+    }
 
     int dirinumber = 0;
     for (int i = 0; i < count; i++) {
@@ -91,3 +103,4 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
 }
 
 // Bug encontrado: directory_findname está metiendo en dirent un dirent cuyo inumber es 0. 
+// Bug profundizdo: la razon por al cual pathname_lookup está devolviendo 0 es porque no entra al for.
