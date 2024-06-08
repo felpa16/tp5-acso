@@ -26,10 +26,10 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
     return -1;
   }
   inode_iget(fs, dirinumber, inode);
-  if ((inode->i_mode ^ IFDIR) != 0) { // OJO CON ESTA LINEA
-    free(inode);
-    return -1;
-  }
+  // if ((inode->i_mode ^ IFDIR) != 0) { // OJO CON ESTA LINEA
+  //   free(inode);
+  //   return -1;
+  // }
   int size = inode_getsize(inode);
   printf("Tamaño del directorio: %i bytes\n", size);
   int mod = size % DISKIMG_SECTOR_SIZE;
@@ -107,6 +107,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
         free(sector_nums);
         free(dirents);
         free(inode);
+        return -1;
       }
       for (long unsigned int k = 0; k < DISKIMG_SECTOR_SIZE/sizeof(struct direntv6); k++) {
         if (strcmp(dirents[k].d_name, name) == 0) {
