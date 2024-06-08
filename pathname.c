@@ -39,6 +39,8 @@ char **split(const char *str, const char *delimiter, int *count) {
 
     // Split the string and store the tokens in the array
     int index = 0;
+    int len = strlen(str_copy);
+    str_copy[len-1] = '\0';
     token = strtok(str_copy, delimiter);
     while (token != NULL) {
         result[index] = strdup(token);
