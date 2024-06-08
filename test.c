@@ -3,6 +3,7 @@
 // Function to split a string into an array of strings based on a delimiter
 char **split(const char *str, const char *delimiter, int *count) {
     // Copy the input string to avoid modifying the original string
+
     char *str_copy = strdup(str);
     if (str_copy == NULL) {
         perror("strdup");
@@ -53,10 +54,16 @@ char **split(const char *str, const char *delimiter, int *count) {
     return result;
 }
 
+
+
 int main() {
-    char *str = "/foo/";
-    char* a = strtok(str, "/");
-    printf("result: %c\n", a[0]);
+    char *str = "/foo/ajl/hola";
+    char *args[1000];
+    int i = 0;
+
+    args[i++] = strtok(str, "/");
+    while ((args[i++] = strtok(NULL, "/")) != NULL);
+    printf("args: %s", args[0]);
     // const char *delimiter = "/";
     // int count;
     // char **result = split(str, delimiter, &count);
