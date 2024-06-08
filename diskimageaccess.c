@@ -126,6 +126,7 @@ static void DumpInodeChecksum(struct unixfilesystem *fs, FILE *f) {
  * format.
  */
 static void DumpPathAndChildren(struct unixfilesystem *fs, const char *pathname, int inumber, FILE *f) {
+  printf("Se llama a DumpPathAndChildren con inumber %i", inumber);
   struct inode in;
   if (inode_iget(fs, inumber, &in) < 0) {
     fprintf(stderr,"Can't read inode %d \n", inumber);
