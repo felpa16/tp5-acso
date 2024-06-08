@@ -8,26 +8,37 @@
 /**
  * TODO
  */
+// int inode_iget(struct unixfilesystem *fs, int inumber, struct inode *inp) {
+//     if (fs == NULL || inp == NULL) return -1;
+//     if (inumber < 1) return -1;
+//     int inode_size = sizeof(struct inode);
+//     int sector_num = INODE_START_SECTOR + (((inumber - 1) * inode_size) / DISKIMG_SECTOR_SIZE);
+//     struct inode* inodes = (struct inode*) malloc(DISKIMG_SECTOR_SIZE);
+//     if (inodes == NULL) return -1;
+//     if (diskimg_readsector(fs->dfd, sector_num, inodes) == -1) {
+//         free(inodes);
+//         return -1;
+//     }
+//     int index = (inumber - 1) % (DISKIMG_SECTOR_SIZE / inode_size);
+//     *inp = inodes[index];
+//     free(inodes);
+//     return 0;
+// }
+
 int inode_iget(struct unixfilesystem *fs, int inumber, struct inode *inp) {
-    if (fs == NULL || inp == NULL) return -1;
-    if (inumber < 1) return -1;
-    int inode_size = sizeof(struct inode);
-    int sector_num = INODE_START_SECTOR + (((inumber - 1) * inode_size) / DISKIMG_SECTOR_SIZE);
-    struct inode* inodes = (struct inode*) malloc(DISKIMG_SECTOR_SIZE);
-    if (inodes == NULL) {
-        free(inodes);
-        return -1;
+    //Heap due to unknown Sector Size    
+    void* buf = malloc(DISKIMG_SECTOR_SIZE);
+    int sectorNum = ((inumber -1)/ (DISKIMG_SECTOR_SIZE/sizeof(struct inode))) 
+        + INODE_START_SECTOR;
+    if (diskimg_readsector(fs->dfd, sectorNum, buf) == -1) {
+        free(buf);
+        return -1;  
     }
-    if (diskimg_readsector(fs->dfd, sector_num, inodes) == -1) {
-        free(inodes);
-        return -1;
-    }
-    int index = (inumber - 1) % (DISKIMG_SECTOR_SIZE / inode_size);
-    *inp = inodes[index];
-    free(inodes);
+    struct inode* node = (struct inode*)buf + ((inumber - 1)%16);
+    *inp = *node;
+    free(buf);
     return 0;
 }
-
 /**
  * TODO
  */
@@ -44,9 +55,6 @@ int inode_indexlookup(struct unixfilesystem *fs, struct inode *inp, int blockNum
         block_count = size / DISKIMG_SECTOR_SIZE;
     }
     if (blockNum < 0 || blockNum > block_count) return -1;
-    
-    // if (size <= DISKIMG_SECTOR_SIZE * 8) return inp->i_addr[blockNum];
-    if (!(inp->i_mode & ILARG)) {return inp->i_addr[blockNum];}
 
     int nums_per_block = DISKIMG_SECTOR_SIZE/sizeof(uint16_t);
     int first_idx = blockNum/nums_per_block;
@@ -55,7 +63,7 @@ int inode_indexlookup(struct unixfilesystem *fs, struct inode *inp, int blockNum
     }
     int second_idx;
     if (first_idx < 7) {
-        second_idx = 256 + blockNum - ((first_idx + 1) * 256);
+        second_idx = blockNum - ((first_idx) * 256);
         uint16_t sector_num = inp->i_addr[first_idx];
         uint16_t* sector = (uint16_t*) malloc(DISKIMG_SECTOR_SIZE);
         if (diskimg_readsector(fs->dfd, sector_num, sector) == -1) {
