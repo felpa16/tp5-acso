@@ -6,7 +6,6 @@
 #include <string.h>
 #include <assert.h>
 #include <stdlib.h>
-#include "string_split.h"
 
 char **split(const char *str, const char *delimiter, int *count) {
 
@@ -42,6 +41,9 @@ char **split(const char *str, const char *delimiter, int *count) {
     return result;
 }
 
+/**
+ * TODO
+ */
 int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
 
     if (fs == NULL || pathname == NULL) return -1;
