@@ -214,6 +214,7 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
     for (int i = 0; i < count; i++) {
         for (int d = 0; d < fs->superblock.s_ninode; d++) {
             struct direntv6 dirent;
+            printf("Llega\n");
             int result = directory_findname(fs, split_strings[i], d, &dirent);
             if (result == -1) { // la funcion directory_findname falla
                 for (int j = 0; j < count; j++) {
