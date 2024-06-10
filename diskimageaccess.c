@@ -59,6 +59,11 @@ int main(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
+  const char* name = "bigfile";
+  struct direntv6 dirent;
+  int inumber = directory_findname(fs, name, 2, &dirent);
+  printf("test inumber: %i\n", inumber);
+
   if (!quietFlag) {  
     int disksize = diskimg_getsize(fd);
     if (disksize < 0) {
