@@ -59,11 +59,6 @@ int main(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  const char* name = "bigfile";
-  struct direntv6 dirent;
-  int inumber = directory_findname(fs, name, 2, &dirent);
-  printf("test inumber: %i\n", inumber);
-
   if (!quietFlag) {  
     int disksize = diskimg_getsize(fd);
     if (disksize < 0) {
@@ -131,7 +126,6 @@ static void DumpInodeChecksum(struct unixfilesystem *fs, FILE *f) {
  * format.
  */
 static void DumpPathAndChildren(struct unixfilesystem *fs, const char *pathname, int inumber, FILE *f) {
-  printf("\nSe llama a DumpPathAndChildren con inumber %i y pathname %s\n", inumber, pathname);
   struct inode in;
   if (inode_iget(fs, inumber, &in) < 0) {
     fprintf(stderr,"Can't read inode %d \n", inumber);
@@ -185,7 +179,6 @@ static void DumpPathAndChildren(struct unixfilesystem *fs, const char *pathname,
 
         char nextpath[MAXPATH];
         sprintf(nextpath, "%s/%s",pathname, direntries[i].d_name);
-        printf("direntry inumber: %i\n", direntries[i].d_inumber);
         DumpPathAndChildren(fs, nextpath,  direntries[i].d_inumber, f);
       }
   }
