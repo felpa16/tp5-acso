@@ -93,6 +93,7 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
         }
         dirinumber = dirent.d_inumber;
         struct inode buf;
+        printf("Se llama a inode_iget con dirinumber %i\n", dirinumber);
         if (inode_iget(fs, dirinumber, &buf) == -1) {
             for (int j = 0; j < count; j++) {
                 free(split_strings[i]);
