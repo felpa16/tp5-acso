@@ -169,7 +169,6 @@ static void DumpPathAndChildren(struct unixfilesystem *fs, const char *pathname,
 
       struct direntv6 direntries[10000];
       int numentries = GetDirEntries(fs, inumber, direntries, 10000);
-      printf("numentries: %i", numentries);
       for (int i = 0; i < numentries; i++) {
         char *n =  direntries[i].d_name;
         if (n[0] == '.') {
