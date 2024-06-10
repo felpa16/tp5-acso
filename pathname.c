@@ -192,54 +192,90 @@ char **split(const char *str, const char *delimiter, int *count) {
 /**
  * TODO
  */
+// int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
+//     printf("1\n");
+//     if (fs == NULL || pathname == NULL) return -1;
+//     const char* home = "/";
+//     if (strcmp(pathname, home) == 0){
+//         return 1;
+//     }
+//     printf("2\n");
+//     int dirinumber;
+//     int count;
+//     const char* delimiter = "/";
+//     char** split_strings = split(pathname, delimiter, &count);
+//     if (count == 0) {
+//         for (int i = 0; i < count; i++) {
+//             free(split_strings[i]);
+//         }
+//         free(split_strings);
+//         printf("There are no directories in the specified path (count = 0)\n");
+//         return -1;
+//     }
+//     printf("3\n");
+//     for (int i = 0; i < count; i++) {
+//         for (int d = 0; d < fs->superblock.s_ninode; d++) {
+//             struct direntv6 dirent;
+//             printf("Llega\n");
+//             int result = directory_findname(fs, split_strings[i], d, &dirent);
+//             if (result == -1) { // la funcion directory_findname falla
+//                 for (int j = 0; j < count; j++) {
+//                     free(split_strings[i]);
+//                 }
+//                 free(split_strings);
+//                 printf("Falla directory_findname\n");
+//                 return -1;
+//             }
+//             // la funcion directory_findname encontró el directorio que le pasamos
+//             dirinumber = dirent.d_inumber;
+//         }
+//     }
+
+//     for (int i = 0; i < count; i++) {
+//         free(split_strings[i]);
+//     }
+//     free(split_strings);
+// 	return dirinumber;
+// }
+
+// // Bug encontrado: directory_findname está metiendo en dirent un dirent cuyo inumber es 0. 
+// // Bug profundizdo: la razon por al cual pathname_lookup está devolviendo 0 es porque no entra al for.
+
 int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
-    printf("1\n");
     if (fs == NULL || pathname == NULL) return -1;
-    const char* home = "/";
-    if (strcmp(pathname, home) == 0){
-        return 1;
+
+    if (strcmp(pathname, "/") == 0) {
+        return 1;  // Root directory inode number
     }
-    printf("2\n");
-    int dirinumber;
+
+    int dirinumber = 1;  // Start with the root directory inode number
     int count;
     const char* delimiter = "/";
     char** split_strings = split(pathname, delimiter, &count);
+
     if (count == 0) {
-        for (int i = 0; i < count; i++) {
-            free(split_strings[i]);
-        }
-        free(split_strings);
         printf("There are no directories in the specified path (count = 0)\n");
         return -1;
     }
-    printf("3\n");
+
     for (int i = 0; i < count; i++) {
-        for (int d = 0; d < fs->superblock.s_ninode; d++) {
-            struct direntv6 dirent;
-            printf("Llega\n");
-            int result = directory_findname(fs, split_strings[i], d, &dirent);
-            if (result == -1) { // la funcion directory_findname falla
-                for (int j = 0; j < count; j++) {
-                    free(split_strings[i]);
-                }
-                free(split_strings);
-                printf("Falla directory_findname\n");
-                return -1;
+        struct direntv6 dirent;
+        int result = directory_findname(fs, split_strings[i], dirinumber, &dirent);
+        if (result != 0) {
+            for (int j = 0; j < count; j++) {
+                free(split_strings[j]);
             }
-            else if (result == -1) { //la funcion directory_findname no encuentra el directorio que le pasamos
-                continue;
-            }
-            // la funcion directory_findname encontró el directorio que le pasamos
-            dirinumber = dirent.d_inumber;
+            free(split_strings);
+            printf("Failed to find directory: %s\n", split_strings[i]);
+            return -1;
         }
+        dirinumber = dirent.d_inumber;
     }
 
     for (int i = 0; i < count; i++) {
         free(split_strings[i]);
     }
     free(split_strings);
-	return dirinumber;
-}
 
-// // Bug encontrado: directory_findname está metiendo en dirent un dirent cuyo inumber es 0. 
-// // Bug profundizdo: la razon por al cual pathname_lookup está devolviendo 0 es porque no entra al for.
+    return dirinumber;
+}
