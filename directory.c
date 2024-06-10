@@ -201,7 +201,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
 
     if (block_count <= 7) {
 
-        for (unsigned long int i = 0; i < block_count; i++) {
+        for (int i = 0; i < block_count; i++) {
             if (diskimg_readsector(fs->dfd, inode->i_addr[i], dirents) == -1) {
                 free(dirents);
                 free(inode);
