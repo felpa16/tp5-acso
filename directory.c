@@ -200,14 +200,14 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
     }
 
     if (block_count <= 7) {
-        // Small directory
-        for (int i = 0; i < block_count; i++) {
+
+        for (unsigned long int i = 0; i < block_count; i++) {
             if (diskimg_readsector(fs->dfd, inode->i_addr[i], dirents) == -1) {
                 free(dirents);
                 free(inode);
                 return -1;
             }
-            for (int j = 0; j < DISKIMG_SECTOR_SIZE / sizeof(struct direntv6); j++) {
+            for (unsigned long int j = 0; j < DISKIMG_SECTOR_SIZE / sizeof(struct direntv6); j++) {
                 if (strcmp(dirents[j].d_name, name) == 0) {
                     *dirEnt = dirents[j];
                     free(dirents);
@@ -217,7 +217,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
             }
         }
     } else {
-        // Large directory
+
         uint16_t* sector_nums = (uint16_t*) malloc(DISKIMG_SECTOR_SIZE);
         if (sector_nums == NULL) {
             free(dirents);
@@ -225,21 +225,21 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
             return -1;
         }
 
-        for (int i = 0; i < 7; i++) {
+        for (unsigned long int i = 0; i < 7; i++) {
             if (diskimg_readsector(fs->dfd, inode->i_addr[i], sector_nums) == -1) {
                 free(sector_nums);
                 free(dirents);
                 free(inode);
                 return -1;
             }
-            for (int j = 0; j < DISKIMG_SECTOR_SIZE / sizeof(uint16_t); j++) {
+            for (unsigned long int j = 0; j < DISKIMG_SECTOR_SIZE / sizeof(uint16_t); j++) {
                 if (diskimg_readsector(fs->dfd, sector_nums[j], dirents) == -1) {
                     free(sector_nums);
                     free(dirents);
                     free(inode);
                     return -1;
                 }
-                for (int k = 0; k < DISKIMG_SECTOR_SIZE / sizeof(struct direntv6); k++) {
+                for (unsigned long int k = 0; k < DISKIMG_SECTOR_SIZE / sizeof(struct direntv6); k++) {
                     if (strcmp(dirents[k].d_name, name) == 0) {
                         *dirEnt = dirents[k];
                         free(sector_nums);
@@ -251,7 +251,6 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
             }
         }
 
-        // Double indirect case
         if (diskimg_readsector(fs->dfd, inode->i_addr[7], sector_nums) == -1) {
             free(sector_nums);
             free(dirents);
@@ -267,7 +266,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
             return -1;
         }
 
-        for (int i = 0; i < DISKIMG_SECTOR_SIZE / sizeof(uint16_t); i++) {
+        for (unsigned long int i = 0; i < DISKIMG_SECTOR_SIZE / sizeof(uint16_t); i++) {
             if (diskimg_readsector(fs->dfd, sector_nums[i], sector_nums_2) == -1) {
                 free(sector_nums_2);
                 free(sector_nums);
@@ -275,7 +274,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
                 free(inode);
                 return -1;
             }
-            for (int j = 0; j < DISKIMG_SECTOR_SIZE / sizeof(uint16_t); j++) {
+            for (unsigned long int j = 0; j < DISKIMG_SECTOR_SIZE / sizeof(uint16_t); j++) {
                 if (diskimg_readsector(fs->dfd, sector_nums_2[j], dirents) == -1) {
                     free(sector_nums_2);
                     free(sector_nums);
@@ -283,7 +282,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
                     free(inode);
                     return -1;
                 }
-                for (int k = 0; k < DISKIMG_SECTOR_SIZE / sizeof(struct direntv6); k++) {
+                for (unsigned long int k = 0; k < DISKIMG_SECTOR_SIZE / sizeof(struct direntv6); k++) {
                     if (strcmp(dirents[k].d_name, name) == 0) {
                         *dirEnt = dirents[k];
                         free(sector_nums_2);
@@ -301,5 +300,5 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
 
     free(dirents);
     free(inode);
-    return -2;  // Name not found
+    return -2;
 }
