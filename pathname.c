@@ -193,12 +193,13 @@ char **split(const char *str, const char *delimiter, int *count) {
  * TODO
  */
 int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
-
+    printf("1\n");
     if (fs == NULL || pathname == NULL) return -1;
     const char* home = "/";
     if (strcmp(pathname, home) == 0){
         return 1;
     }
+    printf("2\n");
     int dirinumber;
     int count;
     const char* delimiter = "/";
@@ -211,6 +212,7 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
         printf("There are no directories in the specified path (count = 0)\n");
         return -1;
     }
+    printf("3\n");
     for (int i = 0; i < count; i++) {
         for (int d = 0; d < fs->superblock.s_ninode; d++) {
             struct direntv6 dirent;
@@ -224,7 +226,7 @@ int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
                 printf("Falla directory_findname\n");
                 return -1;
             }
-            else if (result == -2) { //la funcion directory_findname no encuentra el directorio que le pasamos
+            else if (result == -1) { //la funcion directory_findname no encuentra el directorio que le pasamos
                 continue;
             }
             // la funcion directory_findname encontró el directorio que le pasamos
