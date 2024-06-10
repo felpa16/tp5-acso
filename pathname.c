@@ -23,6 +23,8 @@ char **split(const char *str, const char *delimiter, int *count) {
         perror("strdup");
         exit(EXIT_FAILURE);
     }
+    int len = strlen(str_copy);
+    str_copy[len-1] = '\0';
     char *token = strtok(temp, delimiter);
     while (token != NULL) {
         token_count++;
@@ -66,12 +68,15 @@ char **split(const char *str, const char *delimiter, int *count) {
  * TODO
  */
 int pathname_lookup(struct unixfilesystem *fs, const char *pathname) {
+    
     printf("Se llama a pathname_lookup con path %s\n", pathname);
     if (fs == NULL || pathname == NULL || strlen(pathname) == 0 || pathname[0] != '/') return -1;
     const char* home = "/";
     if (strcmp(pathname, home) == 0){
         return 1;
     }
+    char* path_copy = strdup(pathname);
+    char* token = strtok(path_copy, "/");
     int count;
     const char* delimiter = "/";
     char** split_strings = split(pathname, delimiter, &count);
