@@ -16,7 +16,6 @@ char **split(const char *str, const char *delimiter, int *count) {
         exit(EXIT_FAILURE);
     }
 
-    // Count the number of tokens
     int token_count = 0;
     char *temp = strdup(str);
     if (temp == NULL) {
@@ -32,14 +31,12 @@ char **split(const char *str, const char *delimiter, int *count) {
     }
     free(temp);
 
-    // Allocate memory for the array of strings
     char **result = malloc((token_count + 1) * sizeof(char *));
     if (result == NULL) {
         perror("malloc");
         exit(EXIT_FAILURE);
     }
 
-    // Split the string and store the tokens in the array
     int index = 0;
     str_copy[len-1] = '\0';
     token = strtok(str_copy, delimiter);
@@ -52,14 +49,9 @@ char **split(const char *str, const char *delimiter, int *count) {
         index++;
         token = strtok(NULL, delimiter);
     }
-    result[index] = NULL; // Null-terminate the array
-
-    // Set the count of tokens
+    result[index] = NULL; 
     *count = token_count;
-
-    // Free the copied string
     free(str_copy);
-
     return result;
 }
 
