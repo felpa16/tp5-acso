@@ -15,7 +15,7 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
 
 
   // USAR FILE_GETBLOCK PARA VER LA CANTIDAD DE BYTES VALIDOS DE UN BLOQUE Y NO LEER DE MAS
-
+  printf("Se llama a directory_findname con name %s y dirinumber %i\n", name, dirinumber);
 
   if (fs == NULL || name == NULL || dirEnt == NULL) return -1;
   if (dirinumber < 1) return -1;
@@ -25,11 +25,11 @@ int directory_findname(struct unixfilesystem *fs, const char *name, int dirinumb
     free(inode);
     return -1;
   }
-  inode_iget(fs, dirinumber, inode);
-  // if ((inode->i_mode ^ IFDIR) != 0) { // OJO CON ESTA LINEA
-  //   free(inode);
-  //   return -1;
-  // }
+  if (inode_iget(fs, dirinumber, inode) == -1) {
+    free(inode);
+    return -1;
+  }
+
   int size = inode_getsize(inode);
   printf("Tamaño del directorio: %i bytes\n", size);
   int mod = size % DISKIMG_SECTOR_SIZE;

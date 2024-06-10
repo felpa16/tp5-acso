@@ -23,7 +23,6 @@ int chksumfile_byinumber(struct unixfilesystem *fs, int inumber, void *chksum) {
   }
 
   struct inode in;
-  printf("Cantidad de inodes: %i", fs->superblock.s_ninode);
   // printf("Se llama a inode_iget con inumber %i\n", inumber);
   int err = inode_iget(fs, inumber, &in);
   if (err < 0) {
